@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<title>win10日历特效</title>
+</head>
+<body>
+<style>
+    ul{padding: 0;list-style: none;font-size: 1em;}
+    #date-box{
+        background: #333;
+        color: white;
+        font-family: 微软雅黑;
+        width: 358px;
+    }
+    #week-list:after,#date-list:after{
+        display: table;
+        content: '';
+        clear: both;
+    }
+    #week-list li,#date-list li{
+        width: 14.2857%;
+        text-align: center;
+        float: left;
+        padding: 10px 0;
+    }
+    #prev,#next{cursor: pointer}
+    #time{font-size: 3em;font-weight: 100;margin: 0 0 0 25px;}
+    #year{;color: rgb(54,123,200);margin: 0 0 0 25px;}
+    #year:hover{
+    	color: #888;
+    }
+    #now{display: inline-block;color: white;margin: 0 0 0 25px;}
+    .but{
+    	position: relative;
+    	padding-top: 1em;
+    	margin-top: 1em;
+    	border-top: 1px solid #666;
+    }
+    .but>span{
+    	position: absolute;
+    	transform:rotate(90deg);
+    	-ms-transform:rotate(90deg); 	/* IE 9 */
+    	-moz-transform:rotate(90deg); 	/* Firefox */
+    	-webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+    	-o-transform:rotate(90deg); 
+    }
+    #prev{
+		right: 19.2857%;
+    }
+    #next{
+		right: 5.2857%;
+    }
+</style>
+</head>
+<body>
+<div id="date-box">
+	<div id="time">
+	</div>
+	<div id="year">
+	</div>
+	<div class="but">
+		<div id="now"></div>
+		<span id="prev">&lt;</span>
+		<span id="next">&gt;</span>
+	</div>
+	<ul id="week-list">
+		<li>一</li>
+		<li>二</li>
+		<li>三</li>
+		<li>四</li>
+		<li>五</li>
+		<li>六</li>
+		<li>日</li>
+	</ul>
+	<ul id="date-list">
+	</ul>
+</div>
+<script>
+    //自动获取当前时间
+	//var oDate=new Date();
+    setInterval(function () {
+        var oDate=new Date();
+        document.getElementById('time').innerHTML=oDate.getHours()+':'+oDate.getMinutes()+':'+oDate.getSeconds();
+        document.getElementById('year').innerHTML=oDate.getFullYear()+'年'+(oDate.getMonth()+1)+'月'+oDate.getDate()+'日';
+    },1000);
+    //显示当前时间
+    var date=new Date();
+    showdate(date);
+    //封装获取日期列表的函数
+    function showdate(date) {
+        //当前年月
+        document.getElementById('now').innerHTML=date.getFullYear()+'年'+(date.getMonth()+1)+'月';
+        //当前是周几
+        date.setDate(1);
+        var week=date.getDay();
+        week=week==0?7:week;
+        //当前月的最大天数
+        date.setMonth(date.getMonth()+1);
+        date.setDate(0);
+        var maxdate=date.getDate();
+		//date.setDate(1);
+        //获取日期列表内容
+        //当前月第一天是周几，并在前面空上相应的li
+        var html='';
+        for(var i=1;i<week;i++){
+            html+='<li></li>';
+        }
+        //输出每天的li
+        for(var j=1;j<=maxdate;j++){
+            html+='<li>'+j+'</li>'
+        }
+        //讲内容写到ul中
+        document.getElementById('date-list').innerHTML=html;
+    }
+    //前一个月
+    document.getElementById('prev').onclick=function () {
+        date.setDate(0);
+		//var nowMonth=date.getMonth();
+        showdate(date);
+    }
+    //后一个月
+    document.getElementById('next').onclick=function () {
+//date.setMonth(date.getMonth() + 1);
+        date.setDate(32);
+        showdate(date);
+    }
+</script>
+</body>
+</html>
